@@ -1,6 +1,9 @@
 # IDSpace
 IDSpace is a synthetic data generation framework to generate a large number of identity documents using only a few documents from a target domain without including any private information.
 
+#### Avaliable Synthetic Dataset
+Our synthetic dataset is released on HuggingFace, you can download the datasets from [here](https://huggingface.co/datasets/Anonymous-111/IDSPACE).
+
 ## Environment Setup and Installations
 Python>=10.0 is required to run the project. To install all the dependencies, either run the following command or manually install the dependencies in the [requirements](/requirements.txt) file.
 ```bash
@@ -10,13 +13,10 @@ pip install -r requirements.txt
 
 ## Setting Up Datasets and Models
 #### Setting Up Models
-Download the pretrained models from [here](https://huggingface.co/datasets/cactuslab/IDSpace/blob/main/models.tar.gz) and place the unzipped models folder inside the data/ directory.
+Download the pretrained models from [here](https://huggingface.co/datasets/Anonymous-111/IDSPACE/blob/main/models.tar.gz) and place the unzipped models folder inside the data/ directory.
 
 #### Setting Up Target Domain Images
-Download the target domain images file from [here](https://drive.google.com/file/d/1iqZ0rDuO0GSkc3Osrr7V_--JbvPOky5X/view?usp=sharing) and place the unzipped 'target_images' folder inside the data/ directory.
-
-#### Setting Up Synthetic Dataset
-Download the datasets from [here](https://huggingface.co/datasets/cactuslab/IDSpace) and place the unzipped folders inside the data/ directory.
+In this Experiments, we used SIDTD tmplate dataset as our target domain and used in our experiments, you can download the SIDTD data [here](https://github.com/Oriolrt/SIDTD_Dataset/tree/main/SIDTD/data/DataLoader#run-example) or [here](https://tc11.cvc.uab.es/datasets/SIDTD_1/), then put the `reals` and 'fakes' folders inside the data/templates/ directory. 
 
 
 ## Running the Experiments Scripts
@@ -69,8 +69,11 @@ This include the CycleGAN training part and results evaluation part(test_cyclega
 
 
 ### Running Bayesian Optimization on Scanned Images
-see [here](https://github.com/asu-cactus/IDSpace/tree/master/scanned_image#bayesian-optimization-for-scanned-image-processing) for more details.
+see README.md in scanned_image for more details.
 
 
 ### Running Bayesian Optimization on Template Images
-see [here](https://github.com/asu-cactus/IDSpace/tree/master/template_image#bayesian-optimization-for-template-image-processing) for more details.
+see README.md in template_image for more details.
+
+### Mobile images generation process
+see README.md in mobile_image for more details.
