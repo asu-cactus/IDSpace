@@ -67,7 +67,7 @@ bash cycle_run.sh
 ```
 This include the CycleGAN training part and results evaluation part(test_cyclegan.py).
 
-### Running Bayesian Optimization on Template Images
+### Running Bayesian Optimization and image generation on Template Images
 See README.md in template_image for more details.
 
 We also privide a configure example on SVK.
