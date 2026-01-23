@@ -68,11 +68,14 @@ bash cycle_run.sh
 This include the CycleGAN training part and results evaluation part(test_cyclegan.py).
 
 ### Running Bayesian Optimization on Template Images
-see README.md in template_image for more details.
+See README.md in template_image for more details.
 
 We also privide a configure example on SVK.
+
 In data/inputs/SVK folder:
+
 SVK_configure.yaml contains all the configurations used for BO search and for template image generation.
+
 SVK_pii_configure.yaml contains parameters user can defined if user want to generate some personal data based on a distribution.
 
 To run the pipeline:
@@ -84,7 +87,7 @@ python template_image/template_image_generation.py --best_seting_path data/outpu
 
 
 ### Running Bayesian Optimization on Scanned Images
-see README.md in scanned_image for more details.
+See README.md in scanned_image for more details.
 
 ### Mobile images generation process
-see README.md in mobile_image for more details.
+See README.md in mobile_image for more details.
