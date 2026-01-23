@@ -3,8 +3,8 @@
 This repository contains scripts for applying **Bayesian Optimization (BO)** to template images and generating synthetic images using optimized parameters.
 
 ## File Overview
-### `Bayesian_search.py`
-Performs Bayesian Optimization on template images.
+### `Optuna_search_global.py`
+Performs Bayesian Optimization on template images based on Optuna library.
 
 **Search space includes:**
 - Segment position
@@ -15,36 +15,10 @@ Performs Bayesian Optimization on template images.
 
 #### 🚀 How to Run
 From the root directory of the project:
-
 ```bash
-python template_image/Bayesian_search.py \
-  --area LOCATION_NAME \
-  --segment TEMPLATE_SEGMENT \
-  --target_samples NUM_SAMPLES \
-  --with_model IS_GUIDED \
-  --lambda0 FACTOR_OF_SIMILARITY \
-  --lambda1 FACTOR_OF_CONSISTENCY \
-  --candidate_models MODEL_NAMES \
-  --config_info CONFIG_PATH \
-  --fonts_path PATH_TO_FONTS \
-  --output_file CONFIG_FILE
+python template_image/Optuna_search_global.py \
+  --config </path/to/configure.yaml> \
 ```
-
-**Example:**
-```bash
-python template_image/Bayesian_search.py \
-  --area ALB \
-  --segment surname \
-  --target_samples 10 \
-  --with_model 1 \
-  --lambda0 1 \
-  --lambda1 1 \
-  --candidate_models resnet50 vit-large \
-  --config_info data/configures/ALB_parameters.json \
-  --fonts_path small_fonts \
-  --output_file ALB_parameters.json
-```
-
 ---
 
 ### `template_image_generation.py`
@@ -54,8 +28,7 @@ You must configure the template layout, portrait image, and PII fields.
 #### 🚀 How to Run
 ```bash
 python template_image_generation.py \
-  --parameters_path PARAMETERS_JSON \
-  --JSONPATH PATH_TO_PII_FILES ...
+  --best_setting_path </path/to/best/setting.json> # usually from the BO search output\
 ```
 
 ---
@@ -63,7 +36,4 @@ python template_image_generation.py \
 ### `utils.py`
 Provides shared utility functions for both the optimization and image generation workflows.
 
----
-
-To prevent abuse, we only provide a single generation file for ALB template generation with some parameters hard-coded. For other regions or templates, the hyperparameters may differ slightly. Please contact us if you're interested in accessing additional scripts for research purposes.
 

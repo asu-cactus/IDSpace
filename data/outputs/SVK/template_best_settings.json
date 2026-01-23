@@ -1,0 +1,235 @@
+{
+    "area": "SVK",
+    "template_path": "data/inputs/SVK/template_SVK.png",
+    "text_fonts_path": "data/inputs/text_fonts/",
+    "signature_fonts": "data/inputs/signature_fonts",
+    "portrait_images_path": "data/inputs/portraits",
+    "target_annotation_path": "data/inputs/SVK/SVK_original_annotation.json",
+    "personal_info": "data/inputs/SVK/SVK_pii_configure.yaml",
+    "bo_settings": {
+        "init_points": 1,
+        "n_iter": 3,
+        "seed": 2
+    },
+    "eval_args": {
+        "target_samples": 1,
+        "with_model": 1,
+        "candidate_models": [
+            "resnet50"
+        ],
+        "testing": true,
+        "lambda0": 1,
+        "lambda1": 1,
+        "guided_datapaths": "data/inputs/template_guided_datas.json"
+    },
+    "output": {
+        "best_settings_file": "data/outputs/SVK/template_best_settings.json",
+        "synthetic_images_path": "data/outputs/SVK/positive",
+        "synthetic_images_annotation_path": "data/outputs/SVK/SVK_original_annotation.json"
+    },
+    "models": [
+        {
+            "name": "resnet50",
+            "path": "data/models/resnet50_best.pth",
+            "im_size": 224
+        },
+        {
+            "name": "densenet",
+            "path": "data/models/densenet_best.pth",
+            "im_size": 224
+        }
+    ],
+    "segments": {
+        "portrait": {
+            "type": "image",
+            "bbox": [
+                44,
+                176,
+                370,
+                576
+            ],
+            "tunable": false
+        },
+        "signature": {
+            "type": "signature",
+            "bbox": [
+                718,
+                565,
+                888,
+                707
+            ],
+            "tunable": false
+        },
+        "name": {
+            "type": "text",
+            "font_info": {
+                "x_position": 393,
+                "y_position": 215,
+                "stroke_width": 1,
+                "color_r": 57,
+                "color_g": 57,
+                "color_b": 51,
+                "spacing": 9,
+                "blur_ratio": 0,
+                "font_style": "Verdana_Bold.ttf",
+                "font_size": 42
+            }
+        },
+        "surname": {
+            "type": "text",
+            "font_info": {
+                "x_position": 401,
+                "y_position": 143,
+                "stroke_width": 1,
+                "color_r": 57,
+                "color_g": 57,
+                "color_b": 51,
+                "spacing": 3,
+                "blur_ratio": 0,
+                "font_style": "Verdana_Bold.ttf",
+                "font_size": 37
+            }
+        },
+        "gender": {
+            "type": "text",
+            "font_info": {
+                "x_position": 391,
+                "y_position": 339,
+                "stroke_width": 1,
+                "color_r": 57,
+                "color_g": 57,
+                "color_b": 51,
+                "spacing": -2,
+                "blur_ratio": 0,
+                "font_style": "Verdana_Bold.ttf",
+                "font_size": 42
+            }
+        },
+        "id_number": {
+            "type": "text",
+            "font_info": {
+                "x_position": 804,
+                "y_position": 341,
+                "stroke_width": 1,
+                "color_r": 57,
+                "color_g": 57,
+                "color_b": 51,
+                "spacing": 1,
+                "blur_ratio": 0,
+                "font_style": "Verdana_Bold.ttf",
+                "font_size": 32
+            }
+        },
+        "number": {
+            "type": "text",
+            "font_info": {
+                "x_position": 400,
+                "y_position": 435,
+                "stroke_width": 1,
+                "color_r": 57,
+                "color_g": 57,
+                "color_b": 51,
+                "spacing": 3,
+                "blur_ratio": 0,
+                "font_style": "Verdana.ttf",
+                "font_size": 56
+            }
+        },
+        "issue_place": {
+            "type": "text",
+            "font_info": {
+                "x_position": 388,
+                "y_position": 537,
+                "stroke_width": 1,
+                "color_r": 57,
+                "color_g": 57,
+                "color_b": 51,
+                "spacing": 0,
+                "blur_ratio": 0,
+                "font_style": "Verdana_Bold.ttf",
+                "font_size": 45
+            }
+        },
+        "birth_date": {
+            "type": "text",
+            "font_info": {
+                "x_position": 800,
+                "y_position": 277,
+                "stroke_width": 1,
+                "color_r": 57,
+                "color_g": 57,
+                "color_b": 51,
+                "spacing": 0,
+                "blur_ratio": 0,
+                "font_style": "Verdana_Bold.ttf",
+                "font_size": 32
+            }
+        },
+        "expiry_date": {
+            "type": "text",
+            "font_info": {
+                "x_position": 796,
+                "y_position": 472,
+                "stroke_width": 1,
+                "color_r": 57,
+                "color_g": 57,
+                "color_b": 51,
+                "spacing": 1,
+                "blur_ratio": 0,
+                "font_style": "Verdana_Bold.ttf",
+                "font_size": 32
+            }
+        },
+        "issue_date": {
+            "type": "text",
+            "font_info": {
+                "x_position": 798,
+                "y_position": 537,
+                "stroke_width": 1,
+                "color_r": 57,
+                "color_g": 57,
+                "color_b": 51,
+                "spacing": 3,
+                "blur_ratio": 0,
+                "font_style": "Verdana_Bold.ttf",
+                "font_size": 32
+            }
+        }
+    },
+    "color_group": {
+        "1": {
+            "r": {
+                "initial": 55,
+                "margin": 5
+            },
+            "g": {
+                "initial": 55,
+                "margin": 5
+            },
+            "b": {
+                "initial": 55,
+                "margin": 5
+            }
+        }
+    },
+    "copy_areas": {
+        "portrait": {
+            "bbox": [
+                25,
+                168,
+                377,
+                589
+            ]
+        },
+        "signature": {
+            "bbox": [
+                715,
+                567,
+                891,
+                711
+            ]
+        }
+    },
+    "save_quality1": 70,
+    "save_quality2": 93
+}

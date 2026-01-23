@@ -1,0 +1,280 @@
+# =========================
+# Global paths and metadata
+# =========================
+
+area: SVK                           # Country / document area identifier
+template_path: data/inputs/SVK/template_SVK.png   # Base ID template image
+
+# Font resources
+text_fonts_path: data/inputs/text_fonts/          # Fonts used for printed text
+signature_fonts: data/inputs/signature_fonts      # Fonts used for signatures
+
+# Image and data inputs
+portrait_images_path: data/inputs/portraits       # Input portrait photos
+
+# Annotation paths
+target_annotation_path: data/inputs/SVK/SVK_original_annotation.json
+
+
+# =========================
+# Personal information settings
+# support two different mode.
+#   csv file contains all the personal information
+#   or yaml file containing user defined demograph ruls or distributions 
+# =========================
+# personal_info: data/inputs/SVK/personal_info.csv  # CSV containing personal infomation
+personal_info: data/inputs/SVK/SVK_pii_configure.yaml  # yaml containing personal info distribution
+
+
+# =========================
+# Bayesian Optimization settings
+# =========================
+bo_settings:
+  init_points: 1       # Number of random initialization points
+  n_iter: 3            # Number of optimization iterations
+  seed: 2              # Random seed for reproducibility
+
+# =========================
+# Evaluation configuration
+# =========================
+eval_args:
+  target_samples: 1          # Number of samples used for parameter search
+  with_model: 1              # Whether to use models guided method
+  candidate_models:          # Guided Models 
+    - resnet50
+  testing: true              # Enable testing in the end
+  lambda0: 1                 # scoring weight for SSIM
+  lambda1: 1                 # scoring weight for model consistency
+  guided_datapaths: data/inputs/template_guided_datas.json # Guided data info
+
+# =========================
+# Output configuration
+# =========================
+output:
+  best_settings_file: data/outputs/SVK/template_best_settings.json
+  synthetic_images_path: data/outputs/SVK/positive  # Output directory for generated images
+  synthetic_images_annotation_path: data/outputs/SVK/SVK_original_annotation.json #output annotation file
+
+# =========================
+# Model definitions
+# Models used for guide or testing
+# =========================
+models:
+  - name: resnet50
+    path: data/models/resnet50_best.pth
+    im_size: 224             # Input image size
+
+  - name: densenet
+    path: data/models/densenet_best.pth
+    im_size: 224
+
+# =========================
+# Template segments (fields)
+# =========================
+segments:
+
+  portrait:
+    type: image              # Image-based segment
+    bbox:                    # Bounding box (x1, y1, x2, y2)
+      - 44
+      - 176
+      - 370
+      - 576
+    tunable: false           # Fixed placement
+
+  signature:
+    type: signature
+    bbox:
+      - 718
+      - 565
+      - 888
+      - 707
+    tunable: false
+
+  # ---------- Text fields ----------
+  name:
+    type: text
+    font_group: 1            # Font style group
+    color_group: 1           # Color group reference
+    tunable: true            # Optimized during BO search
+    font_info:
+      text_height:
+        initial: 29          # initial value/ approximation
+        margin: 5            # Allowed variation
+      text_position:
+        x:
+          initial: 397
+          margin: 5
+        y:
+          initial: 211
+          margin: 5
+
+  surname:
+    type: text
+    font_group: 1
+    color_group: 1
+    tunable: true
+    font_info:
+      text_height:
+        initial: 29
+        margin: 5
+      text_position:
+        x:
+          initial: 398
+          margin: 5
+        y:
+          initial: 143
+          margin: 5
+
+  gender:
+    type: text
+    font_group: 1
+    color_group: 1
+    tunable: true
+    font_info:
+      text_height:
+        initial: 32
+        margin: 5
+      text_position:
+        x:
+          initial: 396
+          margin: 5
+        y:
+          initial: 342
+          margin: 5
+
+  id_number:
+    type: text
+    font_group: 1
+    color_group: 1
+    tunable: true
+    font_info:
+      text_height:
+        initial: 26
+        margin: 5
+      text_position:
+        x:
+          initial: 800
+          margin: 5
+        y:
+          initial: 343
+          margin: 5
+
+  number:
+    type: text
+    font_group: 2            # Different font group (e.g., bold / OCR-style)
+    color_group: 1
+    tunable: true
+    font_info:
+      text_height:
+        initial: 38
+        margin: 5
+      text_position:
+        x:
+          initial: 401
+          margin: 5
+        y:
+          initial: 433
+          margin: 5
+
+  issue_place:
+    type: text
+    font_group: 1
+    color_group: 1
+    tunable: true
+    font_info:
+      text_height:
+        initial: 34
+        margin: 5
+      text_position:
+        x:
+          initial: 393
+          margin: 5
+        y:
+          initial: 536
+          margin: 5
+
+  birth_date:
+    type: text
+    font_group: 1
+    color_group: 1
+    tunable: true
+    font_info:
+      text_height:
+        initial: 26
+        margin: 5
+      text_position:
+        x:
+          initial: 801
+          margin: 5
+        y:
+          initial: 276
+          margin: 5
+
+  expiry_date:
+    type: text
+    font_group: 1
+    color_group: 1
+    tunable: true
+    font_info:
+      text_height:
+        initial: 26
+        margin: 5
+      text_position:
+        x:
+          initial: 801
+          margin: 5
+        y:
+          initial: 474
+          margin: 5
+
+  issue_date:
+    type: text
+    font_group: 1
+    color_group: 1
+    tunable: true
+    font_info:
+      text_height:
+        initial: 26
+        margin: 5
+      text_position:
+        x:
+          initial: 802
+          margin: 5
+        y:
+          initial: 540
+          margin: 5
+
+# =========================
+# Color group definitions
+# =========================
+color_group:
+  1:
+    r:
+      initial: 55
+      margin: 5
+    g:
+      initial: 55
+      margin: 5
+    b:
+      initial: 55
+      margin: 5
+
+# =========================
+# Copy-paste regions (if defined, for better evaluation)
+# =========================
+copy_areas:
+  portrait:
+    bbox:
+      - 25
+      - 168
+      - 377
+      - 589
+
+  signature:
+    bbox:
+      - 715
+      - 567
+      - 891
+      - 711
+

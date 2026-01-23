@@ -1,0 +1,10 @@
+{
+  "name": "svk_id_53_fake_8_42",
+  "ctype": "Inpaint_and_Rewrite",
+  "loader": "Midv2020",
+  "shift": "None",
+  "src": "svk_id_53.jpg",
+  "second_src": "None",
+  "field": "id_number",
+  "second_field": "None"
+}

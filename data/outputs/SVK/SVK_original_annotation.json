@@ -1,0 +1,1027 @@
+{
+  "generated_1.png": {
+    "fraud": "False",
+    "name": {
+      "x_position": 393,
+      "y_position": 215,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 9,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 42,
+      "value": "Keith",
+      "bbox": [
+        393,
+        226,
+        553,
+        259
+      ]
+    },
+    "surname": {
+      "x_position": 401,
+      "y_position": 143,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 37,
+      "value": "Ward",
+      "bbox": [
+        401,
+        153,
+        521,
+        181
+      ]
+    },
+    "gender": {
+      "x_position": 391,
+      "y_position": 339,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": -2,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 42,
+      "value": "M",
+      "bbox": [
+        391,
+        351,
+        431,
+        382
+      ]
+    },
+    "id_number": {
+      "x_position": 804,
+      "y_position": 341,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 1,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "422713/3320",
+      "bbox": [
+        804,
+        349,
+        1066,
+        379
+      ]
+    },
+    "number": {
+      "x_position": 400,
+      "y_position": 435,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana.ttf",
+      "font_size": 56,
+      "value": "SS442871",
+      "bbox": [
+        400,
+        450,
+        713,
+        493
+      ]
+    },
+    "issue_place": {
+      "x_position": 388,
+      "y_position": 537,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 45,
+      "value": "Košice",
+      "bbox": [
+        388,
+        546,
+        552,
+        584
+      ]
+    },
+    "birth_date": {
+      "x_position": 800,
+      "y_position": 277,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "30.10.1997",
+      "bbox": [
+        800,
+        286,
+        1005,
+        310
+      ]
+    },
+    "expiry_date": {
+      "x_position": 796,
+      "y_position": 472,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 1,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "23.01.2032",
+      "bbox": [
+        796,
+        481,
+        1013,
+        505
+      ]
+    },
+    "issue_date": {
+      "x_position": 798,
+      "y_position": 537,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "23.01.2026",
+      "bbox": [
+        798,
+        546,
+        1033,
+        570
+      ]
+    },
+    "portrait": {
+      "type": "image",
+      "bbox": [
+        44,
+        176,
+        370,
+        576
+      ],
+      "tunable": false,
+      "value": "generated.photos_v3_0000170.png"
+    },
+    "signature": {
+      "type": "signature",
+      "x_position": 730,
+      "y_position": 627,
+      "font_size": 20,
+      "stroke_width": 0,
+      "color_r": 0,
+      "color_g": 0,
+      "color_b": 0,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "11_SweetLovelyRainbowOne.otf",
+      "value": "Keith",
+      "bbox": [
+        730,
+        623,
+        875,
+        642
+      ]
+    }
+  },
+  "generated_2.png": {
+    "fraud": "False",
+    "name": {
+      "x_position": 393,
+      "y_position": 215,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 9,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 42,
+      "value": "Christopher",
+      "bbox": [
+        393,
+        226,
+        759,
+        266
+      ]
+    },
+    "surname": {
+      "x_position": 401,
+      "y_position": 143,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 37,
+      "value": "Walker",
+      "bbox": [
+        401,
+        153,
+        564,
+        181
+      ]
+    },
+    "gender": {
+      "x_position": 391,
+      "y_position": 339,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": -2,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 42,
+      "value": "M",
+      "bbox": [
+        391,
+        351,
+        431,
+        382
+      ]
+    },
+    "id_number": {
+      "x_position": 804,
+      "y_position": 341,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 1,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "348136/7606",
+      "bbox": [
+        804,
+        349,
+        1066,
+        379
+      ]
+    },
+    "number": {
+      "x_position": 400,
+      "y_position": 435,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana.ttf",
+      "font_size": 56,
+      "value": "JE067988",
+      "bbox": [
+        400,
+        450,
+        697,
+        493
+      ]
+    },
+    "issue_place": {
+      "x_position": 388,
+      "y_position": 537,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 45,
+      "value": "Nitra",
+      "bbox": [
+        388,
+        549,
+        514,
+        584
+      ]
+    },
+    "birth_date": {
+      "x_position": 800,
+      "y_position": 277,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "02.10.1950",
+      "bbox": [
+        800,
+        286,
+        1005,
+        310
+      ]
+    },
+    "expiry_date": {
+      "x_position": 796,
+      "y_position": 472,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 1,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "10.12.2029",
+      "bbox": [
+        796,
+        481,
+        1013,
+        505
+      ]
+    },
+    "issue_date": {
+      "x_position": 798,
+      "y_position": 537,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "10.12.2020",
+      "bbox": [
+        798,
+        546,
+        1033,
+        570
+      ]
+    },
+    "portrait": {
+      "type": "image",
+      "bbox": [
+        44,
+        176,
+        370,
+        576
+      ],
+      "tunable": false,
+      "value": "generated.photos_v3_0000170.png"
+    },
+    "signature": {
+      "type": "signature",
+      "x_position": 760,
+      "y_position": 615,
+      "font_size": 59,
+      "stroke_width": 0,
+      "color_r": 0,
+      "color_g": 0,
+      "color_b": 0,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "13_UniqueSurfer.ttf",
+      "value": "Chris",
+      "bbox": [
+        760,
+        620,
+        845,
+        662
+      ]
+    }
+  },
+  "generated_3.png": {
+    "fraud": "False",
+    "name": {
+      "x_position": 393,
+      "y_position": 215,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 9,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 42,
+      "value": "Nicholas",
+      "bbox": [
+        393,
+        226,
+        657,
+        259
+      ]
+    },
+    "surname": {
+      "x_position": 401,
+      "y_position": 143,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 37,
+      "value": "Howard",
+      "bbox": [
+        401,
+        153,
+        577,
+        181
+      ]
+    },
+    "gender": {
+      "x_position": 391,
+      "y_position": 339,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": -2,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 42,
+      "value": "M",
+      "bbox": [
+        391,
+        351,
+        431,
+        382
+      ]
+    },
+    "id_number": {
+      "x_position": 804,
+      "y_position": 341,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 1,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "363942/2525",
+      "bbox": [
+        804,
+        349,
+        1066,
+        379
+      ]
+    },
+    "number": {
+      "x_position": 400,
+      "y_position": 435,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana.ttf",
+      "font_size": 56,
+      "value": "UF032298",
+      "bbox": [
+        400,
+        450,
+        710,
+        493
+      ]
+    },
+    "issue_place": {
+      "x_position": 388,
+      "y_position": 537,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 45,
+      "value": "Žilina",
+      "bbox": [
+        388,
+        538,
+        527,
+        584
+      ]
+    },
+    "birth_date": {
+      "x_position": 800,
+      "y_position": 277,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "25.03.1977",
+      "bbox": [
+        800,
+        286,
+        1005,
+        310
+      ]
+    },
+    "expiry_date": {
+      "x_position": 796,
+      "y_position": 472,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 1,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "25.08.2035",
+      "bbox": [
+        796,
+        481,
+        1013,
+        505
+      ]
+    },
+    "issue_date": {
+      "x_position": 798,
+      "y_position": 537,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "25.08.2025",
+      "bbox": [
+        798,
+        546,
+        1033,
+        570
+      ]
+    },
+    "portrait": {
+      "type": "image",
+      "bbox": [
+        44,
+        176,
+        370,
+        576
+      ],
+      "tunable": false,
+      "value": "generated.photos_v3_0000170.png"
+    },
+    "signature": {
+      "type": "signature",
+      "x_position": 752,
+      "y_position": 614,
+      "font_size": 61,
+      "stroke_width": 0,
+      "color_r": 0,
+      "color_g": 0,
+      "color_b": 0,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "13_UniqueSurfer.ttf",
+      "value": "Nicho",
+      "bbox": [
+        751,
+        618,
+        852,
+        662
+      ]
+    }
+  },
+  "generated_4.png": {
+    "fraud": "False",
+    "name": {
+      "x_position": 393,
+      "y_position": 215,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 9,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 42,
+      "value": "Dean",
+      "bbox": [
+        393,
+        227,
+        541,
+        259
+      ]
+    },
+    "surname": {
+      "x_position": 401,
+      "y_position": 143,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 37,
+      "value": "Gates",
+      "bbox": [
+        401,
+        153,
+        532,
+        181
+      ]
+    },
+    "gender": {
+      "x_position": 391,
+      "y_position": 339,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": -2,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 42,
+      "value": "M",
+      "bbox": [
+        391,
+        351,
+        431,
+        382
+      ]
+    },
+    "id_number": {
+      "x_position": 804,
+      "y_position": 341,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 1,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "807652/6144",
+      "bbox": [
+        804,
+        349,
+        1066,
+        379
+      ]
+    },
+    "number": {
+      "x_position": 400,
+      "y_position": 435,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana.ttf",
+      "font_size": 56,
+      "value": "QU403959",
+      "bbox": [
+        400,
+        450,
+        722,
+        503
+      ]
+    },
+    "issue_place": {
+      "x_position": 388,
+      "y_position": 537,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 45,
+      "value": "Bratislava",
+      "bbox": [
+        388,
+        549,
+        642,
+        584
+      ]
+    },
+    "birth_date": {
+      "x_position": 800,
+      "y_position": 277,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "05.07.1957",
+      "bbox": [
+        800,
+        286,
+        1005,
+        310
+      ]
+    },
+    "expiry_date": {
+      "x_position": 796,
+      "y_position": 472,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 1,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "27.06.2033",
+      "bbox": [
+        796,
+        481,
+        1013,
+        505
+      ]
+    },
+    "issue_date": {
+      "x_position": 798,
+      "y_position": 537,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "27.06.2025",
+      "bbox": [
+        798,
+        546,
+        1033,
+        570
+      ]
+    },
+    "portrait": {
+      "type": "image",
+      "bbox": [
+        44,
+        176,
+        370,
+        576
+      ],
+      "tunable": false,
+      "value": "generated.photos_v3_0000170.png"
+    },
+    "signature": {
+      "type": "signature",
+      "x_position": 757,
+      "y_position": 611,
+      "font_size": 59,
+      "stroke_width": 0,
+      "color_r": 0,
+      "color_g": 0,
+      "color_b": 0,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "1_AdamSamuel.ttf",
+      "value": "Dean",
+      "bbox": [
+        757,
+        624,
+        849,
+        674
+      ]
+    }
+  },
+  "generated_5.png": {
+    "fraud": "False",
+    "name": {
+      "x_position": 393,
+      "y_position": 215,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 9,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 42,
+      "value": "Scott",
+      "bbox": [
+        393,
+        226,
+        551,
+        259
+      ]
+    },
+    "surname": {
+      "x_position": 401,
+      "y_position": 143,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 37,
+      "value": "Serrano",
+      "bbox": [
+        401,
+        153,
+        582,
+        181
+      ]
+    },
+    "gender": {
+      "x_position": 391,
+      "y_position": 339,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": -2,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 42,
+      "value": "M",
+      "bbox": [
+        391,
+        351,
+        431,
+        382
+      ]
+    },
+    "id_number": {
+      "x_position": 804,
+      "y_position": 341,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 1,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "988308/9040",
+      "bbox": [
+        804,
+        349,
+        1066,
+        379
+      ]
+    },
+    "number": {
+      "x_position": 400,
+      "y_position": 435,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana.ttf",
+      "font_size": 56,
+      "value": "DT575030",
+      "bbox": [
+        400,
+        450,
+        715,
+        493
+      ]
+    },
+    "issue_place": {
+      "x_position": 388,
+      "y_position": 537,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 45,
+      "value": "Košice",
+      "bbox": [
+        388,
+        546,
+        552,
+        584
+      ]
+    },
+    "birth_date": {
+      "x_position": 800,
+      "y_position": 277,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "14.09.1975",
+      "bbox": [
+        800,
+        286,
+        1005,
+        310
+      ]
+    },
+    "expiry_date": {
+      "x_position": 796,
+      "y_position": 472,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 1,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "03.04.2029",
+      "bbox": [
+        796,
+        481,
+        1013,
+        505
+      ]
+    },
+    "issue_date": {
+      "x_position": 798,
+      "y_position": 537,
+      "stroke_width": 1,
+      "color_r": 57,
+      "color_g": 57,
+      "color_b": 51,
+      "spacing": 3,
+      "blur_ratio": 0,
+      "font_style": "Verdana_Bold.ttf",
+      "font_size": 32,
+      "value": "03.04.2019",
+      "bbox": [
+        798,
+        546,
+        1033,
+        570
+      ]
+    },
+    "portrait": {
+      "type": "image",
+      "bbox": [
+        44,
+        176,
+        370,
+        576
+      ],
+      "tunable": false,
+      "value": "generated.photos_v3_0000170.png"
+    },
+    "signature": {
+      "type": "signature",
+      "x_position": 749,
+      "y_position": 615,
+      "font_size": 64,
+      "stroke_width": 0,
+      "color_r": 0,
+      "color_g": 0,
+      "color_b": 0,
+      "spacing": 0,
+      "blur_ratio": 0,
+      "font_style": "14_Windsong.ttf",
+      "value": "Scott",
+      "bbox": [
+        746,
+        629,
+        854,
+        670
+      ]
+    }
+  }
+}

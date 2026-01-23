@@ -1,0 +1,10 @@
+{
+  "name": "svk_id_01_fake_8_111",
+  "ctype": "Crop_and_Replace",
+  "loader": "Midv2020",
+  "shift": "None",
+  "src": "svk_id_32.jpg",
+  "second_src": "svk_id_01.jpg",
+  "field": "gender",
+  "second_field": "gender"
+}

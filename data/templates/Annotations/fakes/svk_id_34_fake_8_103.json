@@ -1,0 +1,10 @@
+{
+  "name": "svk_id_34_fake_8_103",
+  "ctype": "Crop_and_Replace",
+  "loader": "Midv2020",
+  "shift": "None",
+  "src": "svk_id_34.jpg",
+  "second_src": "svk_id_73.jpg",
+  "field": "expiry_date",
+  "second_field": "expiry_date"
+}

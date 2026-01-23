@@ -1,0 +1,377 @@
+# ============================================================
+# Combined config.yaml
+# - Pipeline configuration (modules, portrait assignment, profiles)
+# - PLUS a human-friendly distribution catalog (dist_catalog)
+#
+# User-editable areas:
+#   - ui.* (defaults)
+#   - modules.*.params.* (distribution specs live here)
+#   - portrait_assignment.* (path, bucket keys, bins, strategy)
+#   - output_profiles.* (fields, key_map, formats)
+#
+# The dist_catalog section at the bottom is read-only help text for UI rendering.
+# ============================================================
+
+schema_version: "1.0"
+
+# -----------------------
+# UI / defaults
+# -----------------------
+number_samples: 5
+# -----------------------
+# UI / defaults
+# -----------------------
+ui:
+  default_modules: ["person_core", "dob", "doc_dates", "issue_location", "svk_numbers", "portrait_from_index"]
+  default_profile: "SVK"
+  default_seed: 42
+
+# -----------------------
+# Output profiles
+# -----------------------
+output_profiles:
+
+  BASE:
+    description: "Basic demographic export."
+    fields:
+      - first_name
+      - last_name
+      - gender
+      - ethnicity
+      - age
+      - dob
+      - eye_color
+      - hair_color
+      - hair_length
+      - bald
+      - portrait
+    key_map: {}
+    formats:
+      dob_date_pattern: "%d.%m.%Y"
+
+  SVK:
+    description: "SVK-style output format"
+    fields:
+      - last_name
+      - first_name
+      - dob
+      - issue_date
+      - expiry_date
+      - gender
+      - issue_place
+      - doc_number
+      - local_id_number
+      - signature
+      - portrait
+
+    key_map:
+      last_name: surname
+      first_name: name
+      dob: birth_date
+      doc_number: number
+      local_id_number: id_number
+
+    formats:
+      date_pattern: "%d.%m.%Y"
+      gender_encoding:
+        male: "M"
+        female: "F"
+        nonbinary: "X"
+# -----------------------
+# Portrait index integration
+# -----------------------
+portrait_assignment:
+  jsonl_path: "data/inputs/pii_index.jsonl"   # path to your JSONL portrait index
+  bucket_keys: ["gender", "ethnicity"]
+  age_binning:
+    enabled: true
+    bins: [0, 13, 18, 25, 35, 45, 60, 200]
+  strategy: "bucket_round_robin"   # "bucket_round_robin" or "random"
+  fallback: "random_global"        # "random_global" or "any_bucket"
+
+# -----------------------
+# Modules (building blocks)
+# - Each module supplies canonical fields, has params, and can be selected by user.
+# - Distribution specs go under modules.<module>.params.<field>.dist
+# -----------------------
+modules:
+  person_core:
+    description: "Generate names and categorical attributes (gender, ethnicity)."
+    provides: ["first_name", "last_name", "gender", "ethnicity"]
+    requires: []
+    params:
+      name_capitalization: "first_letter_upper"
+
+      # gender distribution: eligible UI choices per dist_catalog below
+      gender:
+        dist:
+          type: categorical
+          params:
+            values: ["male", "female", "nonbinary"]
+            probs:  [0.9,   0.1,     0.0]
+          enforce: quota
+
+      ethnicity:
+        dist:
+          type: categorical
+          params:
+            values: ["white", "black", "hispanic", "asian", "latino", "other"]
+            probs:  [0.45,    0.15,    0.12,      0.12,    0.12,     0.04]
+          enforce: quota
+
+  dob:
+    description: "Generate integer age and DOB string."
+    provides: ["age", "dob_iso", "dob"]
+    requires: []
+    params:
+      age:
+        dist:
+          type: uniform_int
+          params:
+            min: 18
+            max: 85
+          enforce: sample
+
+      dob_formats:
+        - { pattern: "%d.%m.%Y", prob: 1 }
+        - { pattern: "%d-%m-%Y", prob: 0 }
+
+
+  doc_dates:
+    description: "Adds document lifecycle dates (placeholders or generic dates)."
+    provides: ["issue_date", "expiry_date"]
+    requires: []
+    params:
+      # USER-EDITABLE: output formats (strftime)
+      formats:
+        - { pattern: "%d.%m.%Y", prob: 1 }
+        - { pattern: "%d-%m-%Y", prob: 0 }
+
+      # USER-EDITABLE: how far back an issue date may be
+      issue_years_back_min: 0
+      issue_years_back_max: 10
+
+      # USER-EDITABLE: expiry offset
+      expiry_years_min: 5
+      expiry_years_max: 10
+
+  issue_location:
+    description: "Generate issue_place based on jurisdiction (SVK cities)."
+    provides: ["issue_place"]
+    requires: []
+    params:
+      values: ["Bratislava", "Košice", "Žilina", "Nitra"]
+      probs:  [0.45,        0.20,     0.20,     0.15]
+
+  svk_numbers:
+    description: "SVK document numbers and signature."
+    provides: ["doc_number", "local_id_number", "signature"]
+    requires: ["first_name"]
+    params:
+      number_pattern: "{LETTERS:2}{DIGITS:6}"
+      id_number_pattern: "{DIGITS:6}/{DIGITS:4}"
+      signature_prefix_len: 5
+
+
+
+  traits:
+    description: "Appearance-related traits (eye/hair/bald)."
+    provides: ["eye_color", "hair_color", "hair_length", "bald"]
+    requires: []
+    params:
+      eye_color:
+        dist:
+          type: categorical
+          params:
+            values: ["Brown", "Blue", "Grey", "Green", "Hazel"]
+            probs:  [0.55,    0.18,   0.10,   0.10,    0.07]
+          enforce: sample
+
+      hair_color:
+        dist:
+          type: categorical
+          params:
+            values: ["black", "brown", "blond", "red", "grey"]
+            probs:  [0.35,   0.40,    0.15,   0.05,  0.05]
+          enforce: sample
+
+      hair_length:
+        dist:
+          type: categorical
+          params:
+            values: ["Short", "Medium", "Long"]
+            probs:  [0.45,    0.30,     0.25]
+          enforce: sample
+
+      bald:
+        dist:
+          type: truncated_normal
+          params:
+            mean: 0.12
+            std: 0.05
+            min: 0.0
+            max: 1.0
+          enforce: sample
+
+  portrait_from_index:
+    description: "Assign portrait filename from the JSONL index using coarse buckets."
+    provides: ["portrait"]
+    requires: ["gender", "ethnicity", "age"]
+    params: {}
+
+# -----------------------
+# Distribution catalog (UI/help) - dist_catalog
+# - This block is intended for UI libraries or humans to read.
+# - It documents each supported distribution type and parameter UI hints.
+# -----------------------
+dist_catalog:
+  # Short textual intro for UIs
+  intro: >
+    A catalog of supported distribution types and how to configure them.
+    UI clients can read this section to render dropdowns, help text,
+    forms and example YAML snippets for users.
+
+  categorical:
+    display_name: "Categorical (discrete labels)"
+    description: "Pick one label from a finite set with given probabilities."
+    params:
+      - name: "values"
+        type: "string[]"
+        required: true
+        label: "Labels"
+        help: "List of labels, e.g. ['white','black','asian']"
+        ui_widget: "tag_list"
+      - name: "probs"
+        type: "number[]"
+        required: true
+        label: "Probabilities"
+        help: "Probabilities for each label; should sum to 1."
+        ui_widget: "numeric_list"
+      - name: "enforce"
+        type: "enum"
+        required: false
+        allowed: ["sample", "quota"]
+        default: "sample"
+        help: "'sample' = i.i.d draws; 'quota' = precomputed counts for dataset N"
+    example: |
+      dist:
+        type: categorical
+        params:
+          values: ["male", "female", "nonbinary"]
+          probs:  [0.49,   0.49,     0.02]
+        enforce: quota
+    notes:
+      - "Use 'quota' when you need exact counts for the dataset size."
+
+  uniform_int:
+    display_name: "Uniform integer"
+    description: "Integer uniformly from min to max (inclusive)."
+    params:
+      - { name: "min", type: "integer", required: true, label: "Minimum" }
+      - { name: "max", type: "integer", required: true, label: "Maximum" }
+    example: |
+      dist:
+        type: uniform_int
+        params:
+          min: 18
+          max: 85
+        enforce: sample
+    notes:
+      - "Good for simple integer ranges."
+
+  uniform_float:
+    display_name: "Uniform float"
+    description: "Float uniformly in [min, max]."
+    params:
+      - { name: "min", type: "number", required: true }
+      - { name: "max", type: "number", required: true }
+    example: |
+      dist:
+        type: uniform_float
+        params:
+          min: 0.0
+          max: 1.0
+    notes:
+      - "Use for continuous uniform variables."
+
+  normal:
+    display_name: "Normal (Gaussian)"
+    description: "Unbounded Gaussian with mean/std."
+    params:
+      - { name: "mean", type: "number", required: true }
+      - { name: "std", type: "number", required: true }
+    example: |
+      dist:
+        type: normal
+        params:
+          mean: 177
+          std: 7
+    notes:
+      - "May produce outliers; use truncated_normal for bounds."
+
+  truncated_normal:
+    display_name: "Truncated normal (bounded Gaussian)"
+    description: "Gaussian draws limited to [min,max]."
+    params:
+      - { name: "mean", type: "number", required: true }
+      - { name: "std", type: "number", required: true }
+      - { name: "min", type: "number", required: true }
+      - { name: "max", type: "number", required: true }
+    example: |
+      dist:
+        type: truncated_normal
+        params:
+          mean: 0.12
+          std: 0.05
+          min: 0.0
+          max: 1.0
+    notes:
+      - "Good for bounded features like probabilities."
+
+  mixture_normal:
+    display_name: "Mixture of Gaussians (advanced)"
+    description: "Mixture of multiple normal components (weights sum to 1)."
+    params:
+      - name: "components"
+        type: "list<object>"
+        required: true
+        label: "Components"
+        ui_widget: "table_of_objects"
+        ui_cols:
+          - { key: "weight", label: "Weight", type: "number" }
+          - { key: "mean", label: "Mean", type: "number" }
+          - { key: "std", label: "Std", type: "number" }
+    example: |
+      dist:
+        type: mixture_normal
+        params:
+          components:
+            - { weight: 0.6, mean: 177, std: 7 }
+            - { weight: 0.4, mean: 162, std: 6 }
+    notes:
+      - "UI should validate weights sum to 1 (or normalize)."
+
+  empirical:
+    display_name: "Empirical (histogram)"
+    description: "Sample from an empirical distribution (values + probs or histogram)."
+    params:
+      - { name: "values", type: "any[]", required: false }
+      - { name: "probs", type: "number[]", required: false }
+      - { name: "histogram", type: "object", required: false }
+    example: |
+      dist:
+        type: empirical
+        params:
+          values: [150,160,170,180]
+          probs:  [0.1,0.2,0.5,0.2]
+    notes:
+      - "Useful to replicate a real-data histogram."
+
+  enforcement_modes:
+    - { key: "sample", label: "Sample (IID)", meaning: "Independent draws for each row" }
+    - { key: "quota", label: "Quota (match dataset counts)", meaning: "Precompute counts to match proportions for dataset size N" }
+
+# ============================================================
+# End of combined config.yaml
+# ============================================================
+
