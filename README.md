@@ -16,18 +16,18 @@ pip install -r requirements.txt
 Download the pretrained models from [here](https://huggingface.co/datasets/Anonymous-111/IDSPACE/blob/main/models.tar.gz) and place the unzipped models folder inside the data/ directory.
 
 #### Setting Up Target Domain Images
-In this Experiments, we used SIDTD tmplate dataset as our target domain and used in our experiments, you can download the SIDTD data [here](https://github.com/Oriolrt/SIDTD_Dataset/tree/main/SIDTD/data/DataLoader#run-example) or [here](https://tc11.cvc.uab.es/datasets/SIDTD_1/), then put the `reals` and 'fakes' folders inside the data/templates/ directory. 
+In this Experiments, we used SIDTD tmplate dataset as our target domain and used in our experiments, you can download the SIDTD data in [site1](https://github.com/Oriolrt/SIDTD_Dataset/tree/main/SIDTD/data/DataLoader#run-example) or [site2](https://tc11.cvc.uab.es/datasets/SIDTD_1/), then put the `reals` and `fakes` folders inside the data/templates/ directory. 
 
 
 ## Running the Experiments Scripts
 
 ### Running Bayesian Optimization
-In this Experiments, we used SIDTD tmplate dataset as our target domain and used in our experiments, you can download the SIDTD data [here](https://github.com/Oriolrt/SIDTD_Dataset/tree/main/SIDTD/data/DataLoader#run-example) or [here](https://tc11.cvc.uab.es/datasets/SIDTD_1/), then put the `reals` and 'fakes' folders inside the data/templates/ directory. 
 To run the Bayesian Optimization baseline, run the following command under the root directory of the project.
 ```bash
 python experiments/Bayesian_search.py target_samples with_model lambda0 lambda1 candidate_models
 ```
-In the above command, the parameter target_samples denotes the number of samples to be used (int), with_model denotes whether the optimization will be model-guided or not (0 or 1), lambda0 and lambda1 parameters control the fractions of similarity score and consistency score in the total evaluation score, and candidate_models stand for the names of models (space separated) that will guide the optimization. Example commands are given below:
+In the above command, the parameter target_samples denotes the number of samples to be used (int), with_model denotes whether the optimization will be model-guided or not (0 or 1), lambda0 and lambda1 parameters control the fractions of similarity score and consistency score in the total evaluation score, and candidate_models stand for the names of models (space separated) that will guide the optimization.
+Example commands are given below:
 ##### Example of Search W/ Model-Guided Optimization
 ```bash
 python experiments/Bayesian_search.py 20 1 1 1 resnet50
@@ -67,16 +67,17 @@ bash cycle_run.sh
 ```
 This include the CycleGAN training part and results evaluation part(test_cyclegan.py).
 
-### Running Bayesian Optimization and image generation on Template Images
+## An Example of Generating a (SVK) Image Using IDSpace
+
 See README.md in template_image for more details.
 
-We also privide a configure example on SVK.
+We provide a configuration example on the identity document from SVK.
 
 In data/inputs/SVK folder:
 
 SVK_configure.yaml contains all the configurations used for BO search and for template image generation.
 
-SVK_pii_configure.yaml contains parameters user can defined if user want to generate some personal data based on a distribution.
+SVK_pii_configure.yaml contains parameters user can define if the user wants to generate some personal data based on a distribution.
 
 To run the pipeline:
 ```bash
