@@ -67,9 +67,9 @@ bash cycle_run.sh
 ```
 This include the CycleGAN training part and results evaluation part(test_cyclegan.py).
 
-## An Example of Generating a (SVK) Image Using IDSpace
+## An Example of Generating a Slovakia Document Using IDSpace
 
-See README.md in template_image for more details.
+See [README.md](https://github.com/asu-cactus/IDSpace/tree/master/template_image) in template_image for more details.
 
 We provide a configuration example on the identity document from SVK.
 
@@ -88,7 +88,7 @@ python template_image/template_image_generation.py --best_seting_path data/outpu
 
 
 ### Running Bayesian Optimization on Scanned Images
-See README.md in scanned_image for more details.
+See [README.md](https://github.com/asu-cactus/IDSpace/tree/master/scanned_image) in scanned_image for more details.
 
 ### Mobile images generation process
-See README.md in mobile_image for more details.
+See [README.md](https://github.com/asu-cactus/IDSpace/tree/master/mobile_image) in mobile_image for more details.
