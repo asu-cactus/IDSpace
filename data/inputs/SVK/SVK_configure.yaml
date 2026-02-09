@@ -38,9 +38,12 @@ bo_settings:
 # Objective configuration
 # =========================
 eval_args:
-  target_samples: 1          # Number of samples used for parameter search
-  with_model: 1              # Whether to use the model-guided method
-  candidate_models:          # Guided Models 
+  target_samples: 1                 # Number of samples used for parameter search
+  with_model: 1                     # Whether to use the model-guided method
+  with_fraud: 0                     # Whether to include fraud samples
+  fraud_type: inpaint-and-rewrite   # choose from crop-and-move, inpaint-and-rewrite
+  #fraud_type: crop-and-move   # choose from crop-and-move, inpaint-and-rewrite
+  candidate_models:                 # Guided Models 
     - resnet50
   testing: true              # Enable testing in the end
   lambda0: 1                 # scoring weight for SSIM

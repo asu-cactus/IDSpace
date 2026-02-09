@@ -1,0 +1,91 @@
+bo_settings:
+  init_points: 1
+  n_iter: 1
+  seed: 1
+
+eval_args:
+  target_samples: 10
+  with_model: 1
+  candidate_models: ["densenet"]
+  testing: True
+  lambda0: 1
+  lambda1: 1
+  paper_path: data/inputs/papers 
+  guided_datapaths: data/inputs/scan_guided_datas.json 
+  models:
+  - name: densenet
+    path: data/models/densenet_w_p_2e-06_1e-06_best.pth
+    im_size: 224
+
+output:
+  best_settings_yaml: data/outputs/ALB/scanned_best_settings.yaml
+
+parameters:
+  brightness:
+    initial: 1.0
+    margin: 0.5
+  contrast:
+    initial: 1.0
+    margin: 0.5
+  sharpness_factor:
+    initial: 1.0
+    margin: 0.5
+  noise_std:
+    initial: 2.0
+    margin: 2.0
+  blur_radius:
+    initial: 0.5
+    margin: 0.5
+
+  shadow_offset1:
+    initial: 0
+    margin: 10
+  shadow_offset2:
+    initial: 0
+    margin: 10
+  shadow_color:
+    initial: 25
+    margin: 10
+  shadow_blur_radius:
+    initial: 2
+    margin: 3
+
+  id_resized_shape1:
+    initial: 1013
+    margin: 5
+  id_resized_shape2:
+    initial: 641
+    margin: 5
+
+  top_left1:
+    initial: 50
+    margin: 50
+  top_left2:
+    initial: 50
+    margin: 50
+  top_right1:
+    initial: 50
+    margin: 50
+  top_right2:
+    initial: 50
+    margin: 50
+  bottom_left1:
+    initial: 50
+    margin: 50
+  bottom_left2:
+    initial: 50
+    margin: 50
+  bottom_right1:
+    initial: 50
+    margin: 50
+  bottom_right2:
+    initial: 50
+    margin: 50
+
+  save_quality1:
+    initial: 80
+    margin: 20
+  save_quality2:
+    initial: 80
+    margin: 20
+

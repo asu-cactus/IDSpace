@@ -17,13 +17,9 @@ Applies Bayesian Optimization on scanned images.
 
 **How to Run:**
 ```bash
-python Bayesian_search.py <num_samples> <use_model_guided> <model1> <model2> ...
+cd ..
+python scanned_image/Bayesian_search.py --config scanned_image/scan_config.yaml 
 ```
-
-- `<num_samples>`: Number of samples from the target domain to use in the BO search.
-- `<use_model_guided>`: Whether to use model-guided optimization (`1` for `True` or `0` for `False`).
-- `<model1>, <model2>, ...`: Names of models to be used for BO search.
-
 ---
 
 ### 2. `evaluate_parameters.py`
@@ -43,7 +39,8 @@ Generates scanned-style images using the parameters found via BO.
 
 **How to Run:**
 ```bash
-python scanned_image_generation.py <optional_parameters>
+cd ..
+python scanned_image/scanned_image_generation.py --params_file /path/to/autotuned_parameters --<optional_parameters>
 ```
 
 ---

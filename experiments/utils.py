@@ -31,7 +31,7 @@ from PIL import Image
 from torch.utils.data import Dataset, DataLoader                                                                                                                                                        
 from torchvision import transforms                                                                                                                                                                      
 import shutil
-from custom_noise import add_gaussian_noise, add_salt_and_pepper_noise, add_poisson_noise
+#from custom_noise import add_gaussian_noise, add_salt_and_pepper_noise, add_poisson_noise
                                                                                                                                                                                                         
 
 def get_optimal_font_scale(text, width):
@@ -45,17 +45,24 @@ def get_optimal_font_scale(text, width):
         sel_font = "data/fake_fonts/TTF/DejaVuSans.ttf"
         font = ImageFont.truetype(font=sel_font, size=fontsize ,encoding="unic")
 
-    while (font.getsize(text)[0] < img_fraction*width) and (stop == False):
-        # iterate until the text size is just larger than the criteria
-        if font.getsize(text)[0] == 0:
-            sel_font =  "data/fake_fonts/TTF/DejaVuSans.ttf"
+    bbox = font.getbbox(text)                                                                                                                                                                                
+    b0 = bbox[2] - bbox[0]                                                                                                                                                                                   
+    b1 = bbox[3] - bbox[1]                                                                                                                                                                                   
+    while (b0 < img_fraction*width) and (stop == False):                                                                                                                                                     
+        # iterate until the text size is just larger than the criteria                                                                                                                                       
+        if b0 == 0:                                                                                                                                                                                          
+            sel_font =  "data/fake_fonts/TTF/DejaVuSans.ttf"                                                                                                                                                 
+                                                                                                                                                                                                             
+            if b1 == 0:                                                                                                                                                                                      
+                stop = True                                                                                                                                                                                  
+                break                                                                                                                                                                                        
+                                                                                                                                                                                                             
+        fontsize += 1                                                                                                                                                                                        
+        font = ImageFont.truetype(sel_font, fontsize ,encoding="unic")                                                                                                                                       
+        bbox = font.getbbox(text)                                                                                                                                                                            
+        b0 = bbox[2] - bbox[0]                                                                                                                                                                               
+        b1 = bbox[3] - bbox[1] 
 
-            if font.getsize(text)[1] == 0:
-                stop = True
-                break
-
-        fontsize += 1
-        font = ImageFont.truetype(sel_font, fontsize ,encoding="unic")
 
     # optionally de-increment to be sure it is less than criteria
     fontsize -= 1
@@ -294,6 +301,7 @@ def eval_models(test_paths, confs, testing, candidate_models):
     since = time.time()                                                                                                                                                                                                                                                                                                   
     for M in confs['models']:
         name = M['name']
+        print("Model name:", name)
         if not testing:
             if name not in candidate_models:
                 continue
@@ -332,7 +340,7 @@ def eval_models(test_paths, confs, testing, candidate_models):
             values, indices = torch.sort(outputs, dim=1, descending=True)                                                                                                                                                                                                                                                     
             running_corrects += torch.sum(preds == labels.data)                                                                                                                                                                                                                                                               
         get_cm(All_labels, All_preds)
-        epoch_acc = running_corrects.double() / len(test_loader.dataset)                                                                                                                                                                                                                                                      
+        epoch_acc = running_corrects * 1.0 / len(test_loader.dataset)                                                                                                                                                                                                                                                      
         #cm = ConfusionMatrix(actual_vector=All_labels, predict_vector=All_preds)                                                                                                                                                                                                                                             
         #print(cm)                                                                                                                                                                                                                                                                                                            
                                                                                                                                                                                                                                                                                                                           
@@ -407,6 +415,91 @@ def get_binary_column(label, predict):
             results.append(0)
     return results
 
+def evaluate_diffusion(   segment, confs, testing, candidate_models, with_model, dataset):
+
+# add file path to file
+    annotation_path = confs['annotation_path']
+    oppath = confs['generated_path']
+    font_path = confs["fonts_path"]
+    real_path = f"{oppath}/reals"
+    fake_path = f"{oppath}/fakes"
+    
+
+    area, segment_key = segment.split('_', 1)
+    bbox = confs[segment_key]['bbox']
+    if testing:
+        val_datas = confs['test_data']
+    else:
+        val_datas = confs['val_data']
+
+    def load_all_images(input_folder):                                                                                                                                                                                                                                                                                             
+        input_paths = {}                                                                                                                                                                                                                                                                                                      
+        for image_name in os.listdir(input_folder):                                                                                                                                                                                                                                                                           
+            input_path = os.path.join(input_folder, image_name)                                                                                                                                                                                                                                                           
+            key = image_name[10:]
+            if key in input_paths:
+                input_paths[key].append(input_path)                                                                                                                                                                                                                                                                                
+            else:
+                input_paths[key] = [input_path]                                                                                                                                                                                                                                                                                
+        return input_paths 
+
+    #templates = load_all_images(f'../diffusers/idnet/output/lora_test_results_{dataset}/')
+    templates = load_all_images(f'../diffusers/inpainting/outputs/infer_lora_{dataset}/full')
+    real_paths = "../IDNet-code/data/templates/Images/reals"
+    annotations = load_annotations(annotation_path)
+    test_paths = []
+    ssims = []
+    sample_paths = []
+    for filename, values in tqdm(annotations.items()):
+        if filename in templates :
+            template2 = templates[filename][0]
+
+            content = values[segment_key]['value']
+
+
+            fake_real_name = f"{fake_path}/fake_{filename}"
+            real_img = np.array(Image.open(template2).convert("RGB"))
+            real_coord = values[segment_key]['bbox']
+            real_shape = coord_to_shape(real_coord)
+            real_mask, _ = mask_from_info(real_img, real_shape)
+            real_coord1 = coord_to_coord1(real_coord)
+            fake_real_image =  inpaint_image(img=real_img, coord=real_coord1, mask=real_mask, text_str=content)
+            Image.fromarray(fake_real_image).save(fake_real_name)
+            
+            #itype = template2.split('/')[-1].split('.')[0][-4:]
+            test_paths.append([template2, 0])
+            test_paths.append([fake_real_name, 1])
+
+
+            template2 = os.path.join(real_paths, filename)
+
+            content = values[segment_key]['value']
+
+
+            fake_real_name = f"{fake_path}/real_{filename}"
+            real_img = np.array(Image.open(template2).convert("RGB"))
+            real_coord = values[segment_key]['bbox']
+            real_shape = coord_to_shape(real_coord)
+            real_mask, _ = mask_from_info(real_img, real_shape)
+            real_coord1 = coord_to_coord1(real_coord)
+            fake_real_image =  inpaint_image(img=real_img, coord=real_coord1, mask=real_mask, text_str=content)
+            Image.fromarray(fake_real_image).save(fake_real_name)
+            
+            #itype = template2.split('/')[-1].split('.')[0][-4:]
+            sample_paths.append([template2, 0])
+            sample_paths.append([fake_real_name, 1])
+
+    with open("SIDTD_paths_test.json", 'w') as file:
+        json.dump(sample_paths, file, indent=4)
+    with open("IDNet_paths_test.json", 'w') as file:
+        json.dump(test_paths, file, indent=4)
+
+
+
+    all_tests = eval_models(test_paths, confs, testing, candidate_models)                                                                                                                                                                                                                                                                
+    all_samples = eval_models(sample_paths, confs, testing, candidate_models)                                                                                                                                                                                                                                                                
+    accs = [accuracy_score(all_samples[key][0], all_tests[key][0]) for key in all_tests.keys()]
+    print(f"Models:{all_tests.keys()}, Model accs: {accs}, Mean: {np.mean(accs)}")
 def evaluate_cyclegan1(xx, yy, font_size, stroke_width, xc, yc, zc,  
                         font_style_idx, save_quality1, save_quality2, segment, confs, testing, candidate_models, with_model, dataset):
 

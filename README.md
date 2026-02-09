@@ -67,6 +67,26 @@ bash cycle_run.sh
 ```
 This include the CycleGAN training part and results evaluation part(test_cyclegan.py).
 
+
+### Running Diffusion inpainting Baseline
+Download the repo of diffusers [here](https://github.com/huggingface/diffusers.git)
+Download the data used for this baseline [here](https://drive.google.com/file/d/1tPArY3u3PpSW8IgWtqjnASymyb-iEgFR/view?usp=sharing)
+
+To run the Diffusion inpainting baseline, run the following command under the root directory of the project.
+```bash
+cd experiments
+python test_diffusion.py <dataset>
+```
+
+To train and test the inpainting models:
+```bash
+cd experiments/diffusion_inpainting
+bash train_bash.sh
+python infer_pipeline.py <number of training samples> 
+```
+The folder also contains the data preprocessing code(prepare_data.py)
+
+
 ### Template images generation process
 
 See [README.md](https://github.com/asu-cactus/IDSpace/tree/master/template_image) in template_image for more details.

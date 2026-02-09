@@ -11,6 +11,7 @@ import numpy as np
 import cv2
 import random
 import math
+import tempfile
 from utils import *
 
 
@@ -125,14 +126,17 @@ def simulate_scan(params, image_path):
             if params.get('id_resized_shape'):
                 (target_width, target_height) = params.get('id_resized_shape') 
 
-            resized_id = img_pil.resize((target_width, target_height))
-            #length = math.sqrt( target_width **2 + target_height ** 2)
-            #start1 = random.randint(300, 1000)
-            #start2 = random.randint(300, 1000)
+                resized_id = img_pil.resize((target_width, target_height))
+                id_img = ori_img.resize((target_width, target_height))
+                #length = math.sqrt( target_width **2 + target_height ** 2)
+                #start1 = random.randint(300, 1000)
+                #start2 = random.randint(300, 1000)
+            else:
+                resized_id = img_pil
+                id_img = ori_img
             start1, start2 = 600, 600
             paper_tmp = paper.crop((start1, start2, start1 + 1300, start2 + 1300))
 
-            id_img = ori_img.resize((target_width, target_height))
             resized_id = create_shadow(ori_img, id_img, paper_tmp, params)
 
             resized_id_width, resized_id_height = resized_id.size
@@ -149,16 +153,6 @@ def simulate_scan(params, image_path):
             final_image = paper.convert("RGB")
     return final_image
 
-output_path = "../data/tmp/"
-paper_path = '../data/scanned_data/papers/'
-guided_datapaths = "../data/scanned_data/guided_BO_data.json"
-confs = {"models": [
-    {
-        "name": "densenet",
-        "path": "../data/models/densenet_best.pth",
-        "im_size": 224
-    }
-    ]}
 
 # Defined best parameters
 bps = {}
@@ -183,8 +177,14 @@ bps['save_quality2'] = 70
 def evaluate_parameters(brightness, contrast, sharpness_factor, noise_std, blur_radius, shadow_offset1, shadow_offset2, 
                   shadow_color, shadow_blur_radius, id_resized_shape1, id_resized_shape2, 
                         top_left1, top_left2, top_right1, top_right2, bottom_left1, bottom_left2, bottom_right1, bottom_right2,
-                        save_quality1, save_quality2,
-                       target_samples, testing, candidate_models, with_model):
+                        save_quality1, save_quality2, lambda0, lambda1,
+                       target_samples, testing, candidate_models, with_model, paper_path, guided_datapaths, models ):
+#def evaluate_parameters(**params):
+#        brightness, contrast, sharpness_factor, noise_std, blur_radius, shadow_offset1, shadow_offset2, 
+#                  shadow_color, shadow_blur_radius, id_resized_shape1, id_resized_shape2, 
+#                        top_left1, top_left2, top_right1, top_right2, bottom_left1, bottom_left2, bottom_right1, bottom_right2,
+#                        save_quality1, save_quality2,
+#                       target_samples, testing, candidate_models, with_model):
 
     params = {}
     params['brightness'] = brightness #1.0 + random.uniform(-0.5, 0.5)
@@ -203,8 +203,14 @@ def evaluate_parameters(brightness, contrast, sharpness_factor, noise_std, blur_
     params['bottom_right'] = (int(bottom_right1), int(bottom_right2))
     params['save_quality1'] = int(save_quality1)
     params['save_quality2'] = int(save_quality2)
+
+    confs = {'models': models}
         
     prefix = '_'.join(candidate_models)
+    #testing = params['testing']
+    #target_samples = params['target_samples']
+    #candidate_models = params['candidate_models']
+    #with_model = params['with_model']
     generated_paths = []
     real_paths = []
     ssims = []
@@ -218,55 +224,58 @@ def evaluate_parameters(brightness, contrast, sharpness_factor, noise_std, blur_
     params['paper_texture_path'] = os.path.join(paper_path, os.listdir(paper_path)[0])
     bps['paper_texture_path'] = params['paper_texture_path']
     count = 0
-    for choiced, label in tqdm(choiced_images):
-        count += 1
-        tar_path = os.path.join(output_path, f"{choiced.split('/')[-1][:-4]}_tar_{os.getpid()}_{count}.jpg")
-        syn_path = os.path.join(output_path, f"{choiced.split('/')[-1][:-4]}_syn_{os.getpid()}_{count}.jpg")
-        syn_result = simulate_scan(params, choiced)
-        if label == 0:
-            syn_result.convert("RGB").save(syn_path, quality=params['save_quality1'])
-        else:
-            syn_result.convert("RGB").save(syn_path, quality=params['save_quality2'])
 
-        tar_result = simulate_scan(bps, choiced)
-        if label == 0:
-            tar_result.convert('RGB').save(tar_path, quality=bps['save_quality1'])
-        else:
-            tar_result.convert('RGB').save(tar_path, quality=bps['save_quality2'])
+    with tempfile.TemporaryDirectory() as tmpdirname:
 
-        #sample_np = np.array(tar_result.crop((500, 500, 2000, 2000)))
-        #generated_np = np.array(syn_result.crop((500, 500, 2000, 2000)))
-        sample_np = np.array(tar_result)
-        generated_np = np.array(syn_result)
+        for choiced, label in tqdm(choiced_images):
+            count += 1
+            tar_path = os.path.join(tmpdirname, f"{choiced.split('/')[-1][:-4]}_tar_{os.getpid()}_{count}.jpg")
+            syn_path = os.path.join(tmpdirname, f"{choiced.split('/')[-1][:-4]}_syn_{os.getpid()}_{count}.jpg")
+            syn_result = simulate_scan(params, choiced)
+            if label == 0:
+                syn_result.convert("RGB").save(syn_path, quality=params['save_quality1'])
+            else:
+                syn_result.convert("RGB").save(syn_path, quality=params['save_quality2'])
 
-        real_paths.append([tar_path, label])
-        generated_paths.append([syn_path, label])
-        sv, _ = ssim(sample_np, generated_np, full=True, multichannel=True, channel_axis=-1)
-        ssims.append(sv)
+            tar_result = simulate_scan(bps, choiced)
+            if label == 0:
+                tar_result.convert('RGB').save(tar_path, quality=bps['save_quality1'])
+            else:
+                tar_result.convert('RGB').save(tar_path, quality=bps['save_quality2'])
 
-    score = 0
-    if with_model:
-        all_tests = eval_models(generated_paths, confs, testing, candidate_models)                                                                                                                                                                                                                                                                
-        all_samples = eval_models(real_paths, confs, testing, candidate_models)                                                                                                                                                                                                                                                                
-        accs = [accuracy_score(all_samples[key][0], all_tests[key][0]) for key in all_tests.keys()]
-        score1 = sum(accs)/len(accs)
-        score2 = (sum(ssims) / len(ssims))
-        score = score1 + score2
-        if testing:
-            print(f"Test results for ssim + consistency -> Models:{all_tests.keys()}, Model consistency: {accs}, Evaluation score -> SSIM: {score2}, Consistency: {score1}")
-        else:
-            print(f"SSIM + Consistency -> Models:{all_tests.keys()}, Model consistency: {accs}, Evaluation score -> SSIM: {score2}, Consistency: {score1}")
-    else:
-        score = sum(ssims) / len(ssims)
-        if testing:
+            #sample_np = np.array(tar_result.crop((500, 500, 2000, 2000)))
+            #generated_np = np.array(syn_result.crop((500, 500, 2000, 2000)))
+            sample_np = np.array(tar_result)
+            generated_np = np.array(syn_result)
+
+            real_paths.append([tar_path, label])
+            generated_paths.append([syn_path, label])
+            sv, _ = ssim(sample_np, generated_np, full=True, multichannel=True, channel_axis=-1)
+            ssims.append(sv)
+
+        score = 0
+        if with_model:
             all_tests = eval_models(generated_paths, confs, testing, candidate_models)                                                                                                                                                                                                                                                                
             all_samples = eval_models(real_paths, confs, testing, candidate_models)                                                                                                                                                                                                                                                                
             accs = [accuracy_score(all_samples[key][0], all_tests[key][0]) for key in all_tests.keys()]
             score1 = sum(accs)/len(accs)
             score2 = (sum(ssims) / len(ssims))
-            print(f"Test results for only ssim -> Models:{all_tests.keys()}, Model consistency: {accs}, Evaluation score -> SSIM: {score2}, Consistency: {score1}")
+            score = lambda0 * score1 + lambda1 * score2
+            if testing:
+                print(f"Test results for ssim + consistency -> Models:{all_tests.keys()}, Model consistency: {accs}, Evaluation score -> SSIM: {score2}, Consistency: {score1}")
+            else:
+                print(f"SSIM + Consistency -> Models:{all_tests.keys()}, Model consistency: {accs}, Evaluation score -> SSIM: {score2}, Consistency: {score1}")
         else:
-            print(f"SSIM, Evaluation score -> SSIM: {score}")
+            score = sum(ssims) / len(ssims)
+            if testing:
+                all_tests = eval_models(generated_paths, confs, testing, candidate_models)                                                                                                                                                                                                                                                                
+                all_samples = eval_models(real_paths, confs, testing, candidate_models)                                                                                                                                                                                                                                                                
+                accs = [accuracy_score(all_samples[key][0], all_tests[key][0]) for key in all_tests.keys()]
+                score1 = sum(accs)/len(accs)
+                score2 = (sum(ssims) / len(ssims))
+                print(f"Test results for only ssim -> Models:{all_tests.keys()}, Model consistency: {accs}, Evaluation score -> SSIM: {score2}, Consistency: {score1}")
+            else:
+                print(f"SSIM, Evaluation score -> SSIM: {score}")
     return score
 
 

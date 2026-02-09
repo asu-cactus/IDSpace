@@ -451,6 +451,7 @@ def save_test_files(file_list, destination_dir = "data/outputs/template_test/"):
 
 
 def eval_models(test_paths, confs, testing, candidate_models):                                                                                                                                                                                                                                                                
+    print("#### test size:", len(test_paths))
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     results = {}
     since = time.time()                                                                                                                                                                                                                                                                                                   
@@ -633,6 +634,124 @@ def inpaint_image(img: np.ndarray, coord:np.ndarray, mask: np.ndarray, text_str:
     fake_text_image = np.array(img_pil)                                                                                                                                                                                                                                                                                   
                                                                                                                                                                                                                                                                                                                           
     return fake_text_image
+
+def bbox_to_coord(x, y, w, h):                                                                                                                                                                                                 
+    """This funct bbox_to_coord(x, y, w, h)                                                                                                                                                                                    
+                                                                                                                                                                                                                               
+    Returns:      This function convert the kin of the shape from bbox rectangle x0,y0 + heigh and weight to the polygon coordenades.                                                                                          
+        _type_: _                                                                                                                                                                                                              
+    """                                                                                                                                                                                                     
+    x_f = x + w                                                                                                                                                                                    
+    y_f = y + h                                                                                                                                                                                                                
+                                                                                                                                                                                                                               
+    c1, c2, c3, c4 = [x, y], [x_f, y], [x_f, y_f], [x, y_f]                                                                                                                                                                    
+                                                                                                                                                                                                                               
+    return [c1, c2, c3, c4]                                                                                                                                                                                                    
+                                                                                                                                                                                                                               
+                                                                                                                                                                                                                               
+def bbox_info(shape) -> tuple[int,...]:                                                                                                                                                                                         
+    """This function return the rectangle of the template where are in located,                                                                                                                                                
+                                                                                                                                                                                                                               
+    Returns:                                                                                                                                                                                                                   
+        Tuple[Int, Int, Int, Int]                                                                                                                                                                                              
+    """                                                                                                                                                                                                                        
+                                                                                                                                                                                                                               
+    x0 = shape[0]                                                                                                                                                                                                          
+    y0 = shape[1]                                                                                                                                                                                                          
+    w = shape[2] - x0                                                                                                                                                                                                      
+    h = shape[3] - y0                                                                                                                                                                                                      
+                                                                                                                                                                                                                               
+                                                                                                                                                                                                                               
+                                                                                                                                                                                                                               
+                                                                                                                                                                                                                               
+    return x0, y0, w, h
+
+def replace_info_documents(im0:np.ndarray, im1:np.ndarray, data0:list, data1:list, delta1: int, delta2: int):
+
+    """
+    This function replaces a rectangular region of interest (ROI) in one image with a homography-transformed ROI from another image.
+
+    Args:
+        im0 (np.ndarray): The first input image as a NumPy array.
+        im1 (np.ndarray): The second input image as a NumPy array.
+        data0 (dict): A dictionary containing information about the first image's ROI.
+        data1 (dict): A dictionary containing information about the second image's ROI.
+        delta1 (np.ndarray[float, ...]): An array containing the x and y translation values for the first ROI.
+        delta2 (np.ndarray[float, ...]): An array containing the x and y translation values for the second ROI.
+
+    Returns:
+        Tuple[np.ndarray, bool]: Returns a tuple containing the resulting image after replacing the ROI and a boolean indicator specifying if there was a dimension issue or not.
+    """
+    # take the coordinates of the region to replace
+    x, y, w, h = bbox_info(data0)
+    x2, y2, w2, h2 = bbox_info(data1)
+
+    coord0 = np.array(bbox_to_coord(x, y, w, h), dtype=np.float32())
+    coord1 = np.array(bbox_to_coord(x2, y2, w2, h2), dtype=np.float32())
+
+    H, _ = compute_homography(coord0, coord1)
+    H1, _ = compute_homography(coord1, coord0)
+
+    dx1,dy1 = delta1
+    dx2,dy2 = delta2
+
+    im_rep, dim_issue = crop_replace(im1, im0, coord1, H, dx1,dy1,dx2,dy2)
+    #im_rep1, dim_issue1 = t.crop_replace(im0, im1, coord0, H1, dx2,dy2,dx1,dy1)
+
+    #return im_rep, im_rep1
+    return im_rep
+
+def crop_replace(im_a:np.ndarray, im_b:np.ndarray, coord_a:np.ndarray, H:np.matrix, dx1:int, dy1:int, dx2:int, dy2:int):
+
+    """
+    Crop and replace a region from one image onto another using a homography matrix.
+
+    Args:
+        im_a (numpy.ndarray): The source image to crop the region from.
+        im_b (numpy.ndarray): The target image to replace the region in.
+        coord_a (numpy.ndarray): The coordinates of the region to crop from im_a, in the form of a 3xN array.
+        H (numpy.matrix): The homography matrix used to warp the coordinates of the region from im_a to im_b.
+        dx1 (int): The horizontal shift applied to the region after it is pasted onto im_b.
+        dy1 (int): The vertical shift applied to the region after it is pasted onto im_b.
+        dx2 (int): The horizontal shift applied to the region before it is pasted onto im_b.
+        dy2 (int): The vertical shift applied to the region before it is pasted onto im_b.
+
+    Returns:
+        A tuple containing the resulting image with the region replaced, and a boolean value indicating if there was an issue with the dimensions.
+    """
+    dim_issue = False
+    mask_a = np.zeros_like(im_a)
+    cv2.drawContours(mask_a, [coord_a.astype(int)], -1, color=(255, 255, 255), thickness=cv2.FILLED)
+    y_a, x_a = np.where((mask_a[..., 0] / 255).astype(int) == 1)
+    coordh_a = np.ones((3, len(x_a)), dtype=np.float32())
+    coordh_a[0, :] = x_a
+    coordh_a[1, :] = y_a
+
+    coordh_b = H @ coordh_a
+    coordh_b = coordh_b / coordh_b[-1, ...]
+
+    x_b = coordh_b.T[:, 0].astype(int)
+    y_b = coordh_b.T[:, 1].astype(int)
+
+    im_rep = copy.deepcopy(im_b)
+
+    try :
+        im_rep[y_b +  dy1, x_b + dx1, ...] = im_a[y_a + dy2, x_a + dx2, ...]
+    except:
+        print('ERROR SHAPE CROP REPLACE')
+        dim_issue = True
+
+    return im_rep, dim_issue
+
+def compute_homography(coord0:np.ndarray, coord1:np.ndarray):
+
+    # Homography: p1 = H@p0 | p0 = inv(H)@p1
+    # (where @ denotes matricial product, inv the inverse of the homography
+    # and p0 and p1 are homogeneous coordinates for the pixel coordinates)
+    H, mask = cv2.findHomography(coord1, coord0, cv2.RANSAC, 1.0)
+
+    return H, mask
+
 
 def get_data_range(img):
     img = img.astype("float64")
@@ -1041,13 +1160,23 @@ def evaluate_parameters_global2(**kargs):
 
 
 
-def evaluate_parameters_global(**kargs):
+def evaluate_parameters_global( _delta_boundary = 10, **kargs):
     save_quality1 = int(kargs['save_quality1'])
     save_quality2 = int(kargs['save_quality2'])
     confs = kargs['confs']
     testing = kargs['testing']
     candidate_models = kargs['candidate_models']
     with_model = kargs['with_model']
+    with_fraud = confs['eval_args'].get('with_fraud', 1)
+    fraud_type = confs['eval_args'].get('fraud_type', "inpaint-and-rewrite")
+    if fraud_type not in ['inpaint-and-rewrite', 'crop-and-move']:
+        print(f"Warning: Unsupported fraud type {fraud_type}, will change to without fraud mode!")
+        with_fraud = 0
+    if not with_model and with_fraud:
+        print(f"Warning: With fraud mode can only applied under with model mode, will change to without fraud mode!")
+        with_fraud = 0
+    confs['eval_args']['with_fraud'] = with_fraud
+    confs['eval_args']['fraud_type'] = fraud_type
     lambda0 = kargs['lambda0']
     lambda1 = kargs['lambda1']
     area = kargs['area']
@@ -1074,8 +1203,8 @@ def evaluate_parameters_global(**kargs):
     generated_paths = []
     ssims = []
     psnrs = []
-    ssims_inpaint = []
-    psnrs_inpaint = []
+    ssims_fraud = []
+    psnrs_fraud = []
     sample_paths = []
     outpath_prefix = ''
     panalty = 0
@@ -1086,16 +1215,16 @@ def evaluate_parameters_global(**kargs):
         for filename, values in annotations.items():
             if filename in val_datas:
             #if filename.split('_')[-1]  == "00.jpg":
-                target_sample = "data/templates/Images/reals/" + filename
+                #target_sample = "data/templates/Images/reals/" + filename
                 #print(target_sample)
-                #target_sample = val_datas[filename]
+                target_sample = val_datas[filename]
                 template_image = Image.open(template_path).convert("RGB")
                 target_sample_image = Image.open(target_sample).convert("RGB")
                 sample_np = np.array(target_sample_image)
                 img_width, img_height = target_sample_image.size
                 imp = ImageDraw.Draw(template_image)
 
-                choiced_inpaint_segment = random.choice(candidate_segments)
+                choiced_segment = random.choice(candidate_segments)
 
                 for segment_key, fg, cg in kargs['selected_segments']:
                     #try:
@@ -1132,7 +1261,7 @@ def evaluate_parameters_global(**kargs):
                     except:
                         continue
 
-                    if choiced_inpaint_segment == segment_key:
+                    if choiced_segment == segment_key:
                         choiced_content = content
                         choiced_bbox = bbox
 
@@ -1191,35 +1320,63 @@ def evaluate_parameters_global(**kargs):
                 psnrs.append(psnr_val)
                 if with_model or testing: 
                     generated_name = f"{tmpdirname}/{outpath_prefix}_generated_{filename}"
-                    generated_inpaint_name = f"{tmpdirname}/{outpath_prefix}_generated_inpaint_{filename}"
-                    target_inpaint_name = f"{tmpdirname}/{outpath_prefix}_real_inpaint_{filename}"
                     template_image.save(generated_name, format='JPEG', subsampling=0, quality=save_quality1)
 
-                    real_shape = coord_to_shape(choiced_bbox)
-                    real_mask, _ = mask_from_info(sample_np, real_shape)
-                    real_coord1 = coord_to_coord1(choiced_bbox)
-                    target_inpaint_image =  inpaint_image(img=sample_np, coord=real_coord1, mask=real_mask, text_str=choiced_content)
-
-                    generated_inpaint_image =  inpaint_image(img=generated_np, coord=real_coord1, mask=real_mask, text_str=choiced_content)
-
-                    Image.fromarray(target_inpaint_image).save(target_inpaint_name)
-                    Image.fromarray(generated_inpaint_image).save(generated_inpaint_name, format='JPEG', subsampling=0, quality=save_quality2)
-
                     generated_paths.append([generated_name, 0])
-                    generated_paths.append([generated_inpaint_name, 1])
                     sample_paths.append([target_sample, 0])
-                    sample_paths.append([target_inpaint_name, 1])
+
+                    if with_fraud:
+                        real_shape = coord_to_shape(choiced_bbox)
+                        real_mask, _ = mask_from_info(sample_np, real_shape)
+                        real_coord1 = coord_to_coord1(choiced_bbox)
+                        if fraud_type == "inpaint-and-rewrite":
+                            target_fraud_image =  inpaint_image(img=sample_np, coord=real_coord1, mask=real_mask, text_str=choiced_content)
+
+                            generated_fraud_image =  inpaint_image(img=generated_np, coord=real_coord1, mask=real_mask, text_str=choiced_content)
+                            generated_fraud_name = f"{tmpdirname}/{outpath_prefix}_generated_inpaint_{filename}"
+                            target_fraud_name = f"{tmpdirname}/{outpath_prefix}_real_inpaint_{filename}"
+
+                        else:
+
+                            candidate_images = val_datas.keys()
+                            d2 = val_datas.copy()
+                            d2.pop(filename, None)
+                            d2 = list(d2.keys())
+                            if len(d2) < 1:
+                                print(f"Warning: fraud type {fraud_type} can only applied when the eval set is more than 1 samples, will change to without fraud mode!")
+                                with_fraud = 0
+                                confs['eval_args']['with_fraud'] = with_fraud
+                                continue
+                            changed_key = random.choice(d2)
+                            changed_sample = val_datas[changed_key]
+                            changed_sample_image = Image.open(changed_sample).convert("RGB")
+                            changed_np = np.array(changed_sample_image)
+                            changed_bbox = annotations[changed_key][choiced_segment]['bbox'] 
+
+                            delta1 = random.sample(range(_delta_boundary),2)
+                            delta2 = random.sample(range(_delta_boundary),2)
+
+                            target_fraud_image = replace_info_documents(sample_np, changed_np, choiced_bbox, changed_bbox, delta1, delta2)
+                            generated_fraud_image = replace_info_documents(generated_np, changed_np, choiced_bbox, changed_bbox, delta1, delta2)
+                            generated_fraud_name = f"{tmpdirname}/{outpath_prefix}_generated_crop_{filename}"
+                            target_fraud_name = f"{tmpdirname}/{outpath_prefix}_real_crop_{filename}"
+
+                        Image.fromarray(target_fraud_image).save(target_fraud_name)
+                        Image.fromarray(generated_fraud_image).save(generated_fraud_name, format='JPEG', subsampling=0, quality=save_quality2)
+                        generated_paths.append([generated_fraud_name, 1])
+                        sample_paths.append([target_fraud_name, 1])
 
                 if testing:
-                    inpaint_generated_np = np.array(generated_inpaint_image)
-                    inpaint_target_np = np.array(target_inpaint_image)
-                    sv_inpaint, _ = ssim(inpaint_target_np, inpaint_generated_np, full=True, multichannel=True, channel_axis=-1)
+                    if with_fraud:
+                        fraud_generated_np = np.array(generated_fraud_image)
+                        fraud_target_np = np.array(target_fraud_image)
+                        sv_fraud, _ = ssim(fraud_target_np, fraud_generated_np, full=True, multichannel=True, channel_axis=-1)
 
-                    psnr_inpaint = psnr(
-                            inpaint_target_np, inpaint_generated_np, data_range=get_data_range(sample_np)
-                    )
-                    ssims_inpaint.append(sv_inpaint)
-                    psnrs_inpaint.append(psnr_inpaint)
+                        psnr_fraud = psnr(
+                                fraud_target_np, fraud_generated_np, data_range=get_data_range(sample_np)
+                        )
+                        ssims_fraud.append(sv_fraud)
+                        psnrs_fraud.append(psnr_fraud)
 
 
         ssim_av = sum(ssims) / len(ssims)
@@ -1233,19 +1390,20 @@ def evaluate_parameters_global(**kargs):
             score = ssim_av 
         if testing:
             psnr_av = sum(psnrs) / len(psnrs)
-            ssim_av_inpaint = sum(ssims_inpaint) / len(ssims_inpaint)
-            psnr_av_inpaint = sum(psnrs_inpaint) / len(psnrs_inpaint)
-            print("SSIM values: ", ssims)
-            print("PSNR values: ", psnrs)
-            print("SSIM inpaint values: ", ssims_inpaint)
-            print("PSNR inpaint values: ", psnrs_inpaint)
+            #print("SSIM values: ", ssims)
+            #print("PSNR values: ", psnrs)
 
             save_test_files(generated_paths, destination_dir = "data/outputs/template_test/")
             all_tests = eval_models(generated_paths, confs, testing, candidate_models)                                                                                                                                                                                                                                                                
             all_samples = eval_models(sample_paths, confs, testing, candidate_models)                                                                                                                                                                                                                                                                
             accs = [accuracy_score(all_samples[key][0], all_tests[key][0]) for key in all_tests.keys()]
             print(f"Models:{all_tests.keys()}, Model consistency: {accs}, Evaluation score: {score}, ssim: {ssim_av}, psnr: {psnr_av}")
-            print(f"Evaluation score on inpaint:, ssim: {ssim_av_inpaint}, psnr: {psnr_av_inpaint}")
+            if with_fraud:
+                ssim_av_fraud = sum(ssims_fraud) / len(ssims_fraud)
+                psnr_av_fraud = sum(psnrs_fraud) / len(psnrs_fraud)
+                #print("SSIM fraud values: ", ssims_fraud)
+                #print("PSNR fraud values: ", psnrs_fraud)
+                print(f"Evaluation score on fraud:, ssim: {ssim_av_fraud}, psnr: {psnr_av_fraud}")
     return score
 
 def evaluate_parameters(**kargs):

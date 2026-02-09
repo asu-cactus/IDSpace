@@ -14,6 +14,8 @@
     "eval_args": {
         "target_samples": 1,
         "with_model": 1,
+        "with_fraud": 0,
+        "fraud_type": "inpaint-and-rewrite",
         "candidate_models": [
             "resnet50"
         ],
