@@ -283,5 +283,24 @@ data/outputs/SVK/
 ├── SVK_original_annotation.json
 ├── template_best_settings.json
 ```
+### Optional: fraud image generation
+> **Note:** The fraud image generation code is adapted from the [**SIDTD**](https://github.com/Oriolrt/SIDTD_Dataset/tree/main/SIDTD) repository, with only minimal modifications to better suit the structure and annotations of our dataset.
+```bash
+python template_image/fraud_generation/generate.py data/outputs/SVK positive SVK_original_annotation.json
+```
+Arguments:
 
+- data/outputs/SVK — Base directory containing the source images and annotations
+
+- positive — Relative path (under the base directory) to the folder with positive images to be converted into fraudulent ones
+
+- SVK_original_annotation.json — Relative path (under the base directory) to the annotation file for the positive images
+
+Output:
+
+- Generates fraudulent images and annotations using inpaint and rewrite, crop and replace 
+- All generated images and annotations are saved under: 
+```bash
+data/outputs/SVK
+```
 

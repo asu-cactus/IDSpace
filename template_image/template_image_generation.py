@@ -33,7 +33,7 @@ parser.add_argument('--best_setting_path', type=str, default="data/outputs/SVK/t
 
 args = parser.parse_args()
 
-with open( args.best_seting_path, 'r') as f:
+with open( args.best_setting_path, 'r') as f:
     confs = json.load(f)
 
 text_font_paths = confs['text_fonts_path']
