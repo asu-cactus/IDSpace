@@ -13,7 +13,7 @@ pip install -r requirements.txt
 
 ## Setting Up Datasets and Models
 #### Setting Up Models
-Download the pretrained models from [here](https://huggingface.co/datasets/Anonymous-111/IDSPACE/blob/main/models.tar.gz) and place the unzipped models folder inside the data/ directory.
+Download the pretrained models from [here](https://huggingface.co/datasets/cactuslab/IDSpace/blob/main/models.tar.gz) and place the unzipped models folder inside the data/ directory.
 
 #### Setting Up Target Domain Images
 In this Experiments, we used SIDTD tmplate dataset as our target domain and used in our experiments, you can download the SIDTD data in [site1](https://github.com/Oriolrt/SIDTD_Dataset/tree/main/SIDTD/data/DataLoader#run-example) or [site2](https://tc11.cvc.uab.es/datasets/SIDTD_1/), then put the `reals` and `fakes` folders inside the data/templates/ directory. 
