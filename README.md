@@ -2,7 +2,7 @@
 IDSpace is a synthetic data generation framework to generate a large number of identity documents using only a few documents from a target domain without including any private information.
 
 #### Avaliable Synthetic Dataset
-Our synthetic dataset is released on HuggingFace, you can download the datasets from [here](https://huggingface.co/datasets/Anonymous-111/IDSPACE).
+Our synthetic dataset is released on HuggingFace, you can download the datasets from [here](https://huggingface.co/datasets/cactuslab/IDSpace).
 
 ## Environment Setup and Installations
 Python>=3.10 is required to run the project. To install all the dependencies, either run the following command or manually install the dependencies in the [requirements](/requirements.txt) file.
